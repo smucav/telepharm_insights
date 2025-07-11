@@ -94,7 +94,7 @@ POSTGRES_PORT=5432
 ### 3️⃣ Run with Docker
 
 ```bash
-docker-compose up --build
+docker-compose -f docker/docker-compose.yml up --build
 ```
 
 This spins up:
