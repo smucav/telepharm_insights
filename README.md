@@ -46,7 +46,7 @@ This project answers critical questions for stakeholders:
 
 ## 🗃️ Project Structure
 
-\`\`\`plaintext
+```
 telepharm_insights/
 ├── data/
 │   ├── raw/            # Data lake: raw Telegram JSONs
@@ -62,7 +62,7 @@ telepharm_insights/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── README.md
-\`\`\`
+```
 
 ---
 
@@ -70,14 +70,14 @@ telepharm_insights/
 
 ### 1️⃣ Clone the Repository
 
-\`\`\`bash
+```bash
 git clone https://github.com/YOUR_USERNAME/telepharm_insights.git
 cd telepharm_insights
-\`\`\`
+```
 
 ### 2️⃣ Create your `.env`
 
-\`\`\`dotenv
+```dotenv
 TELEGRAM_API_ID=xxxxxx
 TELEGRAM_API_HASH=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 POSTGRES_USER=postgres
@@ -85,7 +85,7 @@ POSTGRES_PASSWORD=yourpassword
 POSTGRES_DB=telepharm_db
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
-\`\`\`
+```
 
 **Note:** `.env` is **never committed**. Manage secrets safely!
 
@@ -93,9 +93,9 @@ POSTGRES_PORT=5432
 
 ### 3️⃣ Run with Docker
 
-\`\`\`bash
+```bash
 docker-compose up --build
-\`\`\`
+```
 
 This spins up:
 - 🐘 **PostgreSQL** database
