@@ -36,7 +36,7 @@ This project answers critical questions for stakeholders:
 | 🗂️ Task | ✅ Status | 📌 Description |
 |----------------------|-----------|----------------------------|
 | **Task 0** | ✔️ Completed | 📁 **Project structure**, environment management, Docker setup, secure `.env` secrets. |
-| **Task 1** | 🔜 Next | Telegram scraping, raw JSON storage, robust logging |
+| **Task 1** | ✔️ Completed | Telegram scraping with raw JSON, images, partitioned by date & channel, robust logging. |
 | **Task 2** | ⏳ Upcoming | dbt star schema models, staging and marts |
 | **Task 3** | ⏳ Upcoming | Data enrichment with YOLOv8 |
 | **Task 4** | ⏳ Upcoming | Exposing insights via FastAPI |
@@ -115,13 +115,36 @@ This spins up:
 
 ---
 
+## 📌 Task 1 — Data Scraping & Collection
+
+**Status:** ✔️ Completed
+
+**Description:**
+- Developed a robust **Telegram Scraper** using **Telethon**.
+- Extracted messages from multiple Ethiopian medical channels:
+  - `Chemed123`
+  - `lobelia4cosmetics`
+  - `tikvahpharma`
+- Collected **text messages** and **downloaded images** where available.
+- Stored **raw JSON data** in a clear, **partitioned Data Lake** structure:
+
+```data/raw/telegram_messages/YYYY-MM-DD/channel_name/channel_name.json```
+
+- Implemented **logging** with:
+- Channel name & scrape date.
+- Errors & rate limit handling.
+- Download status for images.
+- Ensured data format is **dbt-ready** for next steps:
+- Flat JSON records.
+- Clean fields for fact & dimension modeling.
+
+
 ## ✨ Upcoming Tasks
 
-✅ **Next:**  
-- **Task 1:** Build the Telegram scraper with [Telethon](https://docs.telethon.dev/)  
-  - Save raw messages and images to `data/raw/YYYY-MM-DD/`
-  - Implement robust logging
-  - Store logs of scraping sessions
+✅ **Next:**
+- **Task 2** Data Modeling and Transformation (Transform)
+  - Raw JSON will be loaded to PostgreSQL
+  - transformed with **dbt** star schema models
 
 ---
 
