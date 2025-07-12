@@ -1,0 +1,12 @@
+telepharm_dbt:
+  outputs:
+    dev:
+      dbname: telegram_medical
+      host: localhost
+      pass: root
+      port: 5432
+      schema: raw
+      threads: 5
+      type: postgres
+      user: postgres
+  target: dev
