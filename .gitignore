@@ -6,4 +6,5 @@ data/
 .venv
 *.log
 
-.dbt/
+.dbt/dbt/profiles.yml
+dbt/.user.yml
