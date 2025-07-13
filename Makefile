@@ -5,3 +5,5 @@ dbt-debug:
 
 dbt-run:
 	dbt run --project-dir dbt/telepharm_dbt --profiles-dir dbt
+dbt-test:
+	dbt test --project-dir dbt/telepharm_dbt --profiles-dir dbt
