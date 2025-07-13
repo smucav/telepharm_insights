@@ -37,7 +37,7 @@ This project answers critical questions for stakeholders:
 |----------------------|-----------|----------------------------|
 | **Task 0** | ✔️ Completed | 📁 **Project structure**, environment management, Docker setup, secure `.env` secrets. |
 | **Task 1** | ✔️ Completed | Telegram scraping with raw JSON, images, partitioned by date & channel, robust logging. |
-| **Task 2** | ⏳ Upcoming | dbt star schema models, staging and marts |
+| **Task 2** | ✔️ Completed | loading json file to database, dbt star schema models, staging and marts |
 | **Task 3** | ⏳ Upcoming | Data enrichment with YOLOv8 |
 | **Task 4** | ⏳ Upcoming | Exposing insights via FastAPI |
 | **Task 5** | ⏳ Upcoming | Orchestration with Dagster |
