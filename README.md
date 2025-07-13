@@ -146,6 +146,115 @@ This spins up:
   - Raw JSON will be loaded to PostgreSQL
   - transformed with **dbt** star schema models
 
+
+# 🛠️ Task 2: Data Modeling and Transformation
+
+## ✅ Status
+**✔️ Completed**
+
+---
+
+## 🎯 Deliverables
+
+### 📥 JSON to PostgreSQL
+
+- **Script:** `scripts/load_to_postgres.py`
+  - Loads JSON files into `raw.telegram_messages` with fields:
+    - `message_id`
+    - `channel`
+    - `scrape_date`
+    - `message_date`
+    - `sender_id`
+    - `text`
+    - `has_image`
+    - `image_file`
+    - `message_length`
+  - Adds `message_length` for analytics.
+
+---
+
+### 📦 dbt Project Setup
+
+- Uses existing `dbt/telepharm_dbt/` project.
+- Configured `profiles.yml` to connect to PostgreSQL (`telegram_medical` database).
+- Updated `dbt_project.yml` with:
+  - **Staging schema:** `staging` (views)
+  - **Marts schema:** `marts` (tables)
+
+---
+
+### 🔄 Staging Models
+
+- `stg_telegram_messages.sql`:
+  - Cleans raw data.
+  - Casts dates.
+  - Ensures non-null text.
+
+---
+
+### 📊 Data Mart Models (Star Schema)
+
+- **`dim_channels.sql`:**
+  - Dimension table:
+    - `channel_id`
+    - `channel_name`
+    - `first_message_date`
+    - `last_message_date`
+    - `total_messages`
+
+- **`dim_dates.sql`:**
+  - Date dimension with:
+    - `date_id`
+    - `year`
+    - `month`
+    - `day`
+    - `day_of_week`
+    - `week_of_year`
+    - `is_weekend`
+
+- **`fct_messages.sql`:**
+  - Fact table with message details.
+  - Links to `dim_channels` and `dim_dates`.
+
+---
+
+### ✅ Testing
+
+- **Built-in dbt tests:**
+  - `unique`, `not_null` for primary keys.
+  - `relationships` for foreign keys.
+- **Custom test:**
+  - `custom_message_length.sql` validates message length consistency.
+
+---
+
+### 📚 Documentation
+
+- Generated dbt documentation:
+  - `dbt docs generate`
+  - `dbt docs serve`
+
+---
+
+## 🚀 Execution Instructions
+
+**Load JSON to PostgreSQL:**
+```bash
+python scripts/load_to_postgres.py
+```
+**Verify data in database:**
+```bash
+make dbt-debug
+```
+**Run dbt Models:**
+```bash
+make dbt-run
+```
+
+
+
+
+
 ---
 
 ## 💡 Key Learning Areas
