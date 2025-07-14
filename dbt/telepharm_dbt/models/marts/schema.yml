@@ -32,3 +32,14 @@ models:
           - relationships:
               to: ref('dim_dates')
               field: date_id
+  - name: stg_image_classifications
+    columns:
+      - name: classification_id
+        tests:
+          - unique
+          - not_null
+      - name: message_id
+        tests:
+          - relationships:
+              to: ref('stg_telegram_messages')
+              field: message_id
