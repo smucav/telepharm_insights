@@ -38,7 +38,7 @@ This project answers critical questions for stakeholders:
 | **Task 0** | ✔️ Completed | 📁 **Project structure**, environment management, Docker setup, secure `.env` secrets. |
 | **Task 1** | ✔️ Completed | Telegram scraping with raw JSON, images, partitioned by date & channel, robust logging. |
 | **Task 2** | ✔️ Completed | loading json file to database, dbt star schema models, staging and marts |
-| **Task 3** | ⏳ Upcoming | Data enrichment with YOLOv8 |
+| **Task 3** | ✔️ Completed | Data enrichment with YOLOv8 |
 | **Task 4** | ⏳ Upcoming | Exposing insights via FastAPI |
 | **Task 5** | ⏳ Upcoming | Orchestration with Dagster |
 
@@ -250,12 +250,87 @@ make dbt-debug
 ```bash
 make dbt-run
 ```
+---
 
+## 🛠️ Task 3: Data Enrichment with YOLOv8
 
-
-
+**Status:** ✔️ *Completed*
 
 ---
+
+### 🎯 Deliverables
+
+#### ✅ YOLOv8 Processing
+- **Script:** `scripts/enrich_with_yolo.py` uses `yolov8n.pt` to classify images (e.g., pills, creams, syringes).
+- **Label Mapping:** Maps COCO classes to medical categories.
+- **Logging:** Outputs to `scripts/logs/yolo_enrichment.log`.
+
+---
+
+#### ✅ Storage
+- **Table:** `raw.image_classifications` with:
+  - `classification_id` (PRIMARY KEY)
+  - `message_id` (FOREIGN KEY)
+  - `image_file`
+  - `object_class`
+  - `confidence`
+  - `load_timestamp`
+
+---
+
+#### ✅ dbt Integration
+- **Model:** `stg_image_classifications.sql` stages classifications with `confidence >= 0.5`.
+- **Fact Table:** `fct_messages.sql` excludes `object_class`, joined at query time.
+- **Analysis:** `analyze_object_detections.sql` enables object detection counts.
+
+---
+
+#### ✅ Testing
+- **Tests:** `schema.yml` includes:
+  - `unique` + `not_null` for `classification_id`
+  - `relationships` for `message_id`
+- **Custom Test:** `custom_confidence_range.sql` validates confidence scores.
+
+---
+
+#### ✅ Documentation
+- **Docs:** dbt docs updated with new staging and marts.
+
+---
+
+### 🚀 Execution Instructions
+
+```bash
+# 1️⃣ Install YOLOv8 dependencies
+pip install ultralytics==8.3.15
+
+# 2️⃣ Process images
+python scripts/enrich_with_yolo.py
+
+# 3️⃣ Verify enrichment
+psql -U postgres -d telegram_medical -c "SELECT * FROM raw.image_classifications LIMIT 5;"
+cat scripts/logs/yolo_enrichment.log
+
+# 4️⃣ Run dbt
+make dbt-run
+make dbt-test
+
+# 5️⃣ Generate & serve docs
+make dbt-doc-generate
+make dbt-doc-serve
+```
+
+📝 Notes
+**fct_messages** optimized for one row per message, image classifications joined at query time.
+
+YOLOv8 uses **yolov8n.pt**; can swap in a custom-trained medical model.
+
+**analyze_object_detections.sql** supports insights like object counts per channel.
+
+🔜 Next Steps
+**Task 4**: Develop FastAPI endpoints for insights.
+
+**Task 5**: Orchestrate the full pipeline with Dagster.
 
 ## 💡 Key Learning Areas
 
