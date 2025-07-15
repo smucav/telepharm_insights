@@ -40,7 +40,7 @@ This project answers critical questions for stakeholders:
 | **Task 2** | ✔️ Completed | loading json file to database, dbt star schema models, staging and marts |
 | **Task 3** | ✔️ Completed | Data enrichment with YOLOv8 |
 | **Task 4** | ✔️ Completed | Exposing insights via FastAPI |
-| **Task 5** | ⏳ Upcoming | Orchestration with Dagster |
+| **Task 5** | ✔️ Completed | Orchestration with Dagster |
 
 ---
 
@@ -417,8 +417,94 @@ Endpoints use query-time joins with **stg_image_classifications** for multi-obje
 
 Tests verify response structure and status codes.
 
-🔜 Next Steps
-**Task 5**: Orchestrate pipeline with Dagster.
+# 🛠️ Task 5: Pipeline Orchestration with Dagster
+
+## ✅ Status: Completed
+
+---
+
+## 🎯 Deliverables
+
+### ⚙️ Dagster Installation
+
+- Added `dagster==1.8.7` and `dagster-webserver==1.8.7` to `requirements.txt`.
+
+### 🗂️ Dagster Job
+
+- **dags/telepharm_pipeline.py**: Defines a job with `ops`:
+  - `scrape_telegram_data`: Runs `scrape_telegram.py`.
+  - `load_raw_to_postgres`: Runs `load_to_postgres.py`.
+  - `run_yolo_enrichment`: Runs `enrich_with_yolo.py`.
+  - `run_dbt_transformations`: Runs `dbt run` and `dbt test`.
+- **Sequential execution:** Scrape → Load → Enrich → Transform.
+
+### 🌐 Dagster UI
+
+- Accessible at [http://localhost:3000](http://localhost:3000) via `dagster dev`.
+
+### 🕑 Schedule
+
+- Daily schedule at **08:00 UTC** defined in `telepharm_pipeline.py`.
+
+### 🐳 Docker Integration
+
+- **docker-compose.yml**: Added `dagster` service on port `3000`.
+
+### 📚 Documentation
+
+- Updated `README.md` with Task 5 instructions.
+
+---
+
+## 🚀 Execution Instructions
+
+```bash
+# Create Dagster directory
+mkdir -p dags
+touch dags/__init__.py
+
+# Update dependencies
+docker exec -it telegram_app pip install -r requirements.txt
+
+# Save files:
+# - dags/telepharm_pipeline.py
+# - dags/__init__.py
+# - requirements.txt
+# - docker-compose.yml
+# - README.md
+
+# Start services
+docker-compose -f docker/docker-compose.yml up --build
+
+# Access Dagster UI:
+# Open http://localhost:3000 in a browser
+
+# Navigate to telepharm_pipeline job,
+# click "Launchpad" to run manually,
+# or check "Schedules" for the daily run.
+
+# Run pipeline manually (alternative)
+docker exec -it telegram_dagster dagster job execute -m dags.telepharm_pipeline -j telepharm_pipeline
+
+# Verify logs
+docker logs telegram_dagster
+cat scripts/logs/scraping.log
+cat scripts/logs/yolo_enrichment.log
+cat dbt/logs/dbt.log
+
+# Check data
+docker exec -it postgres_db psql -U postgres -d telegram_medical -c "SELECT * FROM marts.fct_messages LIMIT 5;"
+docker exec -it postgres_db psql -U postgres -d telegram_medical -c "SELECT * FROM staging.stg_image_classifications LIMIT 5;"
+```
+
+📝 Notes
+Pipeline runs sequentially to respect dependencies (e.g., YOLO enrichment needs scraped images).
+
+Schedule set to **08:00 UTC**; adjustable in **telepharm_pipeline.py**.
+
+Dagster UI provides observability (run status, logs, errors).
+
+**dagster dev** runs in the **dagster** service; API and app services remain separate.
 
 ## 💡 Key Learning Areas
 
