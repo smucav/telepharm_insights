@@ -15,4 +15,3 @@ SELECT
 FROM {{ ref('stg_telegram_messages') }} m
 JOIN {{ ref('dim_channels') }} c ON m.channel_id = c.channel_id
 JOIN {{ ref('dim_dates') }} d ON m.message_date::DATE = d.date_id
-
