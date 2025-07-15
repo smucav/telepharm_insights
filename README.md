@@ -39,7 +39,7 @@ This project answers critical questions for stakeholders:
 | **Task 1** | ✔️ Completed | Telegram scraping with raw JSON, images, partitioned by date & channel, robust logging. |
 | **Task 2** | ✔️ Completed | loading json file to database, dbt star schema models, staging and marts |
 | **Task 3** | ✔️ Completed | Data enrichment with YOLOv8 |
-| **Task 4** | ⏳ Upcoming | Exposing insights via FastAPI |
+| **Task 4** | ✔️ Completed | Exposing insights via FastAPI |
 | **Task 5** | ⏳ Upcoming | Orchestration with Dagster |
 
 ---
@@ -327,10 +327,85 @@ YOLOv8 uses **yolov8n.pt**; can swap in a custom-trained medical model.
 
 **analyze_object_detections.sql** supports insights like object counts per channel.
 
-🔜 Next Steps
-**Task 4**: Develop FastAPI endpoints for insights.
+# 🛠️ Task 4: Build an Analytical API with FastAPI
 
-**Task 5**: Orchestrate the full pipeline with Dagster.
+## ✅ Status: Completed
+
+---
+
+## 🎯 Deliverables
+
+### 📦 FastAPI Application
+
+- **api/main.py**: Defines endpoints.
+- **api/database.py**: Manages PostgreSQL connections.
+- **api/models.py**: Placeholder for future ORM (empty).
+- **api/schemas.py**: Pydantic schemas for responses.
+- **api/crud.py**: Query logic for endpoints.
+
+### 🔗 Endpoints
+
+- `GET /api/reports/top-products?limit=10`  
+  ➜ Top products from text and image classifications.
+
+- `GET /api/channels/{channel_name}/activity`  
+  ➜ Posting activity with message and image counts.
+
+- `GET /api/search/messages?query=paracetamol`  
+  ➜ Messages matching a keyword.
+
+- Logs are saved to **api/logs/api.log**.
+
+### 🐳 Docker Integration
+
+- **docker-compose.yml**: Added API service on port `8000`.
+
+### 🧪 Testing
+
+- **api/tests/test_api.py**: Tests endpoints with `pytest` and `httpx`.
+
+### 📚 Documentation
+
+- OpenAPI docs: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+- Updated `README.md`.
+
+### 🛠️ Fixes
+
+- Corrected `dim_dates.date_day` to `date_id` in `crud.py` and `schemas.py` to align with `dim_dates.sql`.
+
+---
+
+## 🚀 Execution Instructions
+
+```bash
+# Create API log directory
+mkdir -p api/logs
+
+# Update dependencies
+docker exec -it telegram_app pip install -r requirements.txt
+
+# Save updated files:
+# - api/schemas.py
+# - api/crud.py
+# - README.md
+
+# Start services
+docker-compose -f docker/docker-compose.yml up --build
+
+# Test API with curl
+curl http://localhost:8000/api/reports/top-products?limit=5
+curl http://localhost:8000/api/channels/Chemed123/activity
+curl http://localhost:8000/api/search/messages?query=paracetamol
+
+# Or access OpenAPI docs
+# http://localhost:8000/docs
+
+# Run tests
+docker exec -it telegram_api pytest api/tests/test_api.py
+
+# Verify logs
+cat api/logs/api.log
 
 ## 💡 Key Learning Areas
 
