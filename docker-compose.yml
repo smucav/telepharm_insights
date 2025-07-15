@@ -23,5 +23,21 @@ services:
     depends_on:
       - db
 
+  dagster:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ..:/app
+    depends_on:
+      - db
+    environment:
+      POSTGRES_HOST: db
+    ports:
+      - "3000:3000"
+    command: dagster dev -h 0.0.0.0 -p 3000 -m dags.telepharm_pipeline
+
+
+
 volumes:
   pgdata:
