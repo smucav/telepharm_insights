@@ -407,6 +407,19 @@ docker exec -it telegram_api pytest api/tests/test_api.py
 # Verify logs
 cat api/logs/api.log
 
+📝 Notes
+
+Endpoints use query-time joins with **stg_image_classifications** for multi-object detection.
+
+**top-products** combines text and image mentions for comprehensive product counts.
+
+**channel_activity** uses **dim_dates.date_id** for accurate date grouping.
+
+Tests verify response structure and status codes.
+
+🔜 Next Steps
+**Task 5**: Orchestrate pipeline with Dagster.
+
 ## 💡 Key Learning Areas
 
 > This repo demonstrates practical skills in:
