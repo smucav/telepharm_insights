@@ -406,7 +406,7 @@ docker exec -it telegram_api pytest api/tests/test_api.py
 
 # Verify logs
 cat api/logs/api.log
-
+```
 📝 Notes
 
 Endpoints use query-time joins with **stg_image_classifications** for multi-object detection.
