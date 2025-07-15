@@ -8,6 +8,10 @@ ENV PYTHONUNBUFFERED 1
 # Install system dependencies
 RUN apt-get update && apt-get install -y     build-essential     && rm -rf /var/lib/apt/lists/*
 
+# 👇 Install OpenCV dependencies for libGL
+RUN apt-get update && apt-get install -y libgl1
+
+
 # Create and set working directory
 WORKDIR /app
 
