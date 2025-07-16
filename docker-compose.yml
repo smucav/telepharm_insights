@@ -24,9 +24,7 @@ services:
       - db
 
   dagster:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+    build: .
     volumes:
       - ..:/app
     depends_on:
